@@ -1,7 +1,16 @@
 #!/usr/bin/env python
 
-import urllib
-import urllib2
+# Default to Python 2.x structure, fall back to Python 3.x structure.
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
+
+try:
+    from urllib2 import urlopen, Request
+except ImportError:
+    from urllib.request import urlopen, Request
+
 import json
 
 
@@ -16,11 +25,11 @@ class ShapeShiftIO:
 
     def get_request(self, url):
 
-        ret = urllib2.urlopen(urllib2.Request(url))
+        ret = urlopen(Request(url))
         return json.loads(ret.read())
 
     def post_request(self, url, postdata):
-        ret = urllib2.urlopen(urllib2.Request(url, urllib.urlencode(postdata)))
+        ret = urlopen(Request(url, urlencode(postdata)))
         return json.loads(ret.read())
 
 
