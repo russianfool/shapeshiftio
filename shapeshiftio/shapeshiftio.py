@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import urllib
 import urllib2
@@ -59,16 +59,16 @@ class ShapeShiftIO:
         """
         This gets the market info (pair, rate, limit, minimum limit, miner fee)
 
-	[pair] (OPTIONAL) is any valid coin pair such as btc_ltc or ltc_btc.
-	The pair is not required and if not specified will return an array of all market infos.
+        [pair] (OPTIONAL) is any valid coin pair such as btc_ltc or ltc_btc.
+        The pair is not required and if not specified will return an array of all market infos.
 
-	Success Output:
+        Success Output:
             {   
-	        "pair"     : "btc_ltc",
-	        "rate"     : 130.12345678,
-	        "limit"    : 1.2345,
-	        "min"      : 0.02621232,
-	        "minerFee" : 0.0001
+                "pair"     : "btc_ltc",
+                "rate"     : 130.12345678,
+                "limit"    : 1.2345,
+                "min"      : 0.02621232,
+                "minerFee" : 0.0001
             }
 
         """
@@ -98,7 +98,7 @@ class ShapeShiftIO:
 
     def tx_status(self, address):
         """
-	This returns the status of the most recent deposit transaction to the address. 
+        This returns the status of the most recent deposit transaction to the address. 
         [address] is the deposit address to look up.
  
         Success Output:  (various depending on status)
@@ -176,8 +176,8 @@ class ShapeShiftIO:
         return self.get_request(self.url)
 
     def tx_by_apikey(self, apiKey):
-	"""
-	Allows vendors to get a list of all transactions that have ever been done using a specific API key. Transactions are created with an affilliate PUBLIC KEY, but they are looked up using the linked PRIVATE KEY, to protect the privacy of our affiliates' account details. 
+        """
+        Allows vendors to get a list of all transactions that have ever been done using a specific API key. Transactions are created with an affilliate PUBLIC KEY, but they are looked up using the linked PRIVATE KEY, to protect the privacy of our affiliates' account details. 
 
         [apiKey] is the affiliate's PRIVATE api key.
  
@@ -199,7 +199,7 @@ class ShapeShiftIO:
  
         The status can be "received", "pending", "verifying_send", "sent_exact", "exchanged". "sent_exact" is the same as
         "exchanged", for all intensive purposes, meaning the shift completed, funds were sent in and out and there was no error.
-	"""
+        """
         self.url = self.baseurl + "/txbyapikey/" + apiKey
         return self.get_request(self.url)
 
@@ -210,7 +210,7 @@ class ShapeShiftIO:
         [address] the address that output coin was sent to for the shift
         [apiKey] is the affiliate's PRIVATE api key.
 
-	Success Output:
+        Success Output:
 
             [   
                 {   
@@ -254,8 +254,8 @@ class ShapeShiftIO:
         return self.get_request(self.url)
 
     def shift(self, postdata):
-	"""
-	This is the primary data input into ShapeShift. 
+        """
+        This is the primary data input into ShapeShift. 
 
         data required:
         withdrawal     = the address for resulting coin to be sent to
@@ -282,8 +282,8 @@ class ShapeShiftIO:
         return self.post_request(self.url, postdata)
 
     def set_mail(self, postdata):
-	"""
-	This call requests a receipt for a transaction. The email address will be added to the conduit associated with that transaction as well. (Soon it will also send receipts to subsequent transactions on that conduit) 
+        """
+        This call requests a receipt for a transaction. The email address will be added to the conduit associated with that transaction as well. (Soon it will also send receipts to subsequent transactions on that conduit) 
 
         data required:
         email    = the address for receipt email to be sent to
@@ -297,14 +297,14 @@ class ShapeShiftIO:
                 "message":"Email receipt sent"
                 }
             }
-	"""
+        """
         self.url = self.baseurl + "/mail"
         return self.post_request(self.url, postdata)
 
     def send_amount(self, postdata):
-	"""
-	This call allows you to request a fixed amount to be sent to the withdrawal address. You provide a withdrawal address and the amount you want sent to it. We return the amount to deposit and the address to deposit to. This allows you to use shapeshift as a payment mechanism. This call also allows you to request a quoted price on the amount of a transaction without a withdrawal address.
-	//1. Send amount request
+        """
+        This call allows you to request a fixed amount to be sent to the withdrawal address. You provide a withdrawal address and the amount you want sent to it. We return the amount to deposit and the address to deposit to. This allows you to use shapeshift as a payment mechanism. This call also allows you to request a quoted price on the amount of a transaction without a withdrawal address.
+        //1. Send amount request
  
  
         Data required:
@@ -366,13 +366,13 @@ class ShapeShiftIO:
                     minerFee: [miner fee for this transaction]
                   }
             }
-	"""
+        """
         self.url = self.baseurl + "/sendamount"
         return self.post_request(self.url, postdata)
 
     def cancel_pending(self, postdata):
-	"""
-	This call allows you to request for canceling a pending transaction by the deposit address. If there is fund sent to the deposit address, this pending transaction cannot be canceled.
+        """
+        This call allows you to request for canceling a pending transaction by the deposit address. If there is fund sent to the deposit address, this pending transaction cannot be canceled.
 
         data required: address  = The deposit address associated with the pending transaction
 
@@ -385,6 +385,6 @@ class ShapeShiftIO:
         Error Output:
 
          {  error  : {errorMessage}  }
-	"""
+        """
         self.url = self.baseurl + "/cancelpending"
         return self.post_request(self.url, postdata)
