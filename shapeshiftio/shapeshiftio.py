@@ -535,17 +535,21 @@ class ShapeShiftIO:
         return cancel_pending(postdata, self)
         
 # Transfer all the function docstrings to the class methods as well.
-ShapeShiftIO.rate.__func__.__doc__ = rate.__doc__
-ShapeShiftIO.limit.__func__.__doc__ = limit.__doc__
-ShapeShiftIO.market_info.__func__.__doc__ = market_info.__doc__
-ShapeShiftIO.recent_tx.__func__.__doc__ = recent_tx.__doc__
-ShapeShiftIO.tx_status.__func__.__doc__ = tx_status.__doc__
-ShapeShiftIO.time_remaining.__func__.__doc__ = time_remaining.__doc__
-ShapeShiftIO.coin_list.__func__.__doc__ = coin_list.__doc__
-ShapeShiftIO.tx_by_api_key.__func__.__doc__ = tx_by_api_key.__doc__
-ShapeShiftIO.tx_by_address.__func__.__doc__ = tx_by_address.__doc__
-ShapeShiftIO.validate_address.__func__.__doc__ = validate_address.__doc__
-ShapeShiftIO.shift.__func__.__doc__ = shift.__doc__
-ShapeShiftIO.set_mail.__func__.__doc__ = set_mail.__doc__
-ShapeShiftIO.send_amount.__func__.__doc__ = send_amount.__doc__
-ShapeShiftIO.cancel_pending.__func__.__doc__ = cancel_pending.__doc__
+try:
+    ShapeShiftIO.rate.__func__.__doc__ = rate.__doc__
+    ShapeShiftIO.limit.__func__.__doc__ = limit.__doc__
+    ShapeShiftIO.market_info.__func__.__doc__ = market_info.__doc__
+    ShapeShiftIO.recent_tx.__func__.__doc__ = recent_tx.__doc__
+    ShapeShiftIO.tx_status.__func__.__doc__ = tx_status.__doc__
+    ShapeShiftIO.time_remaining.__func__.__doc__ = time_remaining.__doc__
+    ShapeShiftIO.coin_list.__func__.__doc__ = coin_list.__doc__
+    ShapeShiftIO.tx_by_api_key.__func__.__doc__ = tx_by_api_key.__doc__
+    ShapeShiftIO.tx_by_address.__func__.__doc__ = tx_by_address.__doc__
+    ShapeShiftIO.validate_address.__func__.__doc__ = validate_address.__doc__
+    ShapeShiftIO.shift.__func__.__doc__ = shift.__doc__
+    ShapeShiftIO.set_mail.__func__.__doc__ = set_mail.__doc__
+    ShapeShiftIO.send_amount.__func__.__doc__ = send_amount.__doc__
+    ShapeShiftIO.cancel_pending.__func__.__doc__ = cancel_pending.__doc__
+except AttributeError:
+    pass
+
