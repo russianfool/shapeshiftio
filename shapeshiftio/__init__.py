@@ -1,4 +1,1 @@
-try:
-    from shapeshiftio import ShapeShiftIO
-except ImportError:
-    from .shapeshiftio import ShapeShiftIO
+from .shapeshiftio import ShapeShiftIO, rate, limit, market_info, recent_tx, tx_status, time_remaining, coin_list, tx_by_api_key, tx_by_address, validate_address, shift, set_mail, send_amount, cancel_pending
