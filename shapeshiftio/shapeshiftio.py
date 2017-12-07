@@ -22,18 +22,17 @@ import json
 shapeshift_url_base = "https://shapeshift.io"
 
 # Helper functions to wrap all the urllib calls.
-def _get_request(url):
+def _get_request(url, timeout):
     """ Internal """
-    response = urlopen(Request(url)).read()
+    response = urlopen(Request(url), timeout=timeout).read()
     return json.loads(response)
 
-def _post_request(url, postdata):
+def _post_request(url, postdata, timeout):
     """ Internal """
-    response = urlopen(Request(url, urlencode(postdata))).read()
+    response = urlopen(Request(url, urlencode(postdata)), timeout=timeout).read()
     return json.loads(response)
 
-
-def rate(pair, url_store=None):
+def rate(pair, url_store=None, timeout=None):
     """
     Gets the current rate offered by Shapeshift. This is an estimate because the rate can occasionally change rapidly depending on the markets. The rate is also a 'use-able' rate not a direct market rate. Meaning multiplying your input coin amount times the rate should give you a close approximation of what will be sent out. This rate does not include the transaction (miner) fee taken off every transaction.
 
@@ -52,10 +51,10 @@ def rate(pair, url_store=None):
     url = shapeshift_url_base + "/rate/" + pair
     if (url_store):
         url_store.url = url
-    return _get_request(url)
+    return _get_request(url, timeout)
 
 
-def limit(pair, url_store=None):
+def limit(pair, url_store=None, timeout=None):
     """
     Gets the current deposit limit set by Shapeshift. Amounts deposited over this limit will be sent to the return address if one was entered, otherwise the user will need to contact ShapeShift support to retrieve their coins. This is an estimate because a sudden market swing could move the limit.
 
@@ -73,10 +72,10 @@ def limit(pair, url_store=None):
     url = shapeshift_url_base + "/limit/" + pair
     if (url_store):
         url_store.url = url
-    return _get_request(url)
+    return _get_request(url, timeout)
 
 
-def market_info(pair, url_store=None):
+def market_info(pair, url_store=None, timeout=None):
     """
     This gets the market info (pair, rate, limit, minimum limit, miner fee)
     
@@ -98,10 +97,10 @@ def market_info(pair, url_store=None):
     url = shapeshift_url_base + "/marketinfo/" + pair
     if (url_store):
         url_store.url = url
-    return _get_request(url)
+    return _get_request(url, timeout)
 
 
-def recent_tx(max_results=5, url_store=None):
+def recent_tx(max_results=5, url_store=None, timeout=None):
     """
     Get a list of the most recent transactions.
     
@@ -126,10 +125,10 @@ def recent_tx(max_results=5, url_store=None):
     url = shapeshift_url_base + "/recenttx/" + str(max_results)
     if (url_store):
         url_store.url = url
-    return _get_request(url)
+    return _get_request(url, timeout)
 
 
-def tx_status(address, url_store=None):
+def tx_status(address, url_store=None, timeout=None):
     """
     This returns the status of the most recent deposit transaction to the address.
 
@@ -175,9 +174,9 @@ def tx_status(address, url_store=None):
     url = shapeshift_url_base + "/txStat/" + address
     if (url_store):
         url_store.url = url
-    return _get_request(url)
+    return _get_request(url, timeout)
 
-def time_remaining(address, url_store=None):
+def time_remaining(address, url_store=None, timeout=None):
     """
     When a transaction is created with a fixed amount requested there is a 10 minute window for the deposit. After the 10 minute window if the deposit has not been received the transaction expires and a new one must be created. This api call returns how many seconds are left before the transaction expires. Please note that if the address is a ripple address, it will include the "?dt=destTagNUM" appended on the end, and you will need to use the URIEncodeComponent() function on the address before sending it in as a param, to get a successful response.
 
@@ -199,9 +198,9 @@ def time_remaining(address, url_store=None):
     url = shapeshift_url_base + "/timeremaining/" + address
     if (url_store):
         url_store.url = url
-    return _get_request(url)
+    return _get_request(url, timeout)
 
-def coin_list(url_store=None):
+def coin_list(url_store=None, timeout=None):
     """
     Allows anyone to get a list of all the currencies that Shapeshift currently supports at any given time. The list will include the name, symbol, availability status, and an icon link for each.
     
@@ -227,9 +226,9 @@ def coin_list(url_store=None):
     url = shapeshift_url_base + "/getcoins"
     if (url_store):
         url_store.url = url
-    return _get_request(url)
+    return _get_request(url, timeout)
 
-def tx_by_api_key(api_key, url_store=None):
+def tx_by_api_key(api_key, url_store=None, timeout=None):
     """
     Allows vendors to get a list of all transactions that have ever been done using a specific API key. Transactions are created with an affilliate PUBLIC KEY, but they are looked up using the linked PRIVATE KEY, to protect the privacy of our affiliates' account details.
     
@@ -259,9 +258,9 @@ def tx_by_api_key(api_key, url_store=None):
     url = shapeshift_url_base + "/txbyapi_key/" + api_key
     if (url_store):
         url_store.url = url
-    return _get_request(url)
+    return _get_request(url, timeout)
 
-def tx_by_address(api_key, address, url_store=None):
+def tx_by_address(api_key, address, url_store=None, timeout=None):
     """
     Allows vendors to get a list of all transactions that have ever been sent to one of their addresses. The affilliate's PRIVATE KEY must be provided, and will only return transactions that were sent to output address AND were created using / linked to the affiliate's PUBLIC KEY. Please note that if the address is a ripple address and it includes the "?dt=destTagNUM" appended on the end, you will need to use the URIEncodeComponent() function on the address before sending it in as a param, to get a successful response.
     
@@ -294,9 +293,9 @@ def tx_by_address(api_key, address, url_store=None):
     url = shapeshift_url_base + "/txbyaddress/" + address + "/" + api_key
     if (url_store):
         url_store.url = url
-    return _get_request(url)
+    return _get_request(url, timeout)
 
-def validate_address(address, coin, url_store=None):
+def validate_address(address, coin, url_store=None, timeout=None):
     """
     Allows user to verify that their receiving address is a valid address according to a given wallet daemon. If isvalid returns true, this address is valid according to the coin daemon indicated by the currency symbol.
     
@@ -320,9 +319,9 @@ def validate_address(address, coin, url_store=None):
     url = shapeshift_url_base + "/validateAddress/" + address + "/" + coin
     if (url_store):
         url_store.url = url
-    return _get_request(url)
+    return _get_request(url, timeout)
     
-def shift(postdata, url_store=None):
+def shift(postdata, url_store=None, timeout=None):
     """
     This is the primary data input into ShapeShift. 
 
@@ -353,9 +352,9 @@ def shift(postdata, url_store=None):
     url = shapeshift_url_base + "/shift"
     if (url_store):
         url_store.url = url
-    return _post_request(url, postdata)
+    return _post_request(url, postdata, timeout)
 
-def set_mail(postdata, url_store=None):
+def set_mail(postdata, url_store=None, timeout=None):
     """
     This call requests a receipt for a transaction. The email address will be added to the conduit associated with that transaction as well. (Soon it will also send receipts to subsequent transactions on that conduit)
     
@@ -378,9 +377,9 @@ def set_mail(postdata, url_store=None):
     url = shapeshift_url_base + "/mail"
     if (url_store):
         url_store.url = url
-    return _post_request(url, postdata)
+    return _post_request(url, postdata, timeout)
 
-def send_amount(postdata, url_store=None):
+def send_amount(postdata, url_store=None, timeout=None):
     """
     This call allows you to request a fixed amount to be sent to the withdrawal address. You provide a withdrawal address and the amount you want sent to it. We return the amount to deposit and the address to deposit to. This allows you to use shapeshift as a payment mechanism. This call also allows you to request a quoted price on the amount of a transaction without a withdrawal address.
 
@@ -458,9 +457,9 @@ def send_amount(postdata, url_store=None):
     url = shapeshift_url_base + "/sendamount"
     if (url_store):
         url_store.url = url
-    return _post_request(url, postdata)
+    return _post_request(url, postdata, timeout)
 
-def cancel_pending(postdata, url_store=None):
+def cancel_pending(postdata, url_store=None, timeout=None):
     """
     This call allows you to request for canceling a pending transaction by the deposit address. If there is fund sent to the deposit address, this pending transaction cannot be canceled.
     
@@ -482,57 +481,58 @@ def cancel_pending(postdata, url_store=None):
     url = shapeshift_url_base + "/cancelpending"
     if (url_store):
         url_store.url = url
-    return _post_request(url, postdata)
+    return _post_request(url, postdata, timeout)
 
 
 # Legacy class here for backwards compatiblity with old shapeshiftio 0.1.1.
 # No need for a class - there's no state to preserve when hitting a REST API.
 class ShapeShiftIO:
-    def __init__(self):
+    def __init__(self, timeout=None):
         """ ShapeShiftIO API class. Stores the last called API in self.url """
         self.url = None
+        self.timeout = timeout
         
     def rate(self, pair):
-        return rate(pair, self)
+        return rate(pair, self, self.timeout)
 
     def limit(self, pair):
-        return limit(pair, self)
+        return limit(pair, self, self.timeout)
 
     def market_info(self, pair):
-        return market_info(pair, self)
+        return market_info(pair, self, self.timeout)
 
     def recent_tx(self, max_results=5):
-        return recent_tx(max_results, self)
+        return recent_tx(max_results, self, self.timeout)
 
     def tx_status(self, address):
-        return tx_status(address, self)
+        return tx_status(address, self, self.timeout)
 
     def time_remaining(address, url_store=None):
-        return time_remaining(address, self)
+        return time_remaining(address, self, self.timeout)
 
     def coin_list(self):
-        return coin_list(self)
+        return coin_list(self, self.timeout)
 
     def tx_by_api_key(self, api_key):
-        return tx_by_api_key(api_key, self)
+        return tx_by_api_key(api_key, self, self.timeout)
 
     def tx_by_address(self, api_key, address):
-        return tx_by_address(api_key, address, self)
+        return tx_by_address(api_key, address, self, self.timeout)
 
     def validate_address(self, address, coin):
-        return validate_address(address, coin, self)
+        return validate_address(address, coin, self, self.timeout)
         
     def shift(self, postdata):
-        return shift(postdata, self)
+        return shift(postdata, self, self.timeout)
 
     def set_mail(self, postdata):
-        return set_mail(postdata, self)
+        return set_mail(postdata, self, self.timeout)
 
     def send_amount(self, postdata):
-        return send_amount(postdata, self)
+        return send_amount(postdata, self, self.timeout)
 
     def cancel_pending(self, postdata):
-        return cancel_pending(postdata, self)
+        return cancel_pending(postdata, self, self.timeout)
         
 # Transfer all the function docstrings to the class methods as well.
 try:
